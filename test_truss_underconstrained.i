@@ -1,6 +1,7 @@
 [Mesh]
   type = FileMesh
-  file = 90wt_0bar_contact.msh 
+  file = test_gmsh.msh 
+  #file = test.msh 
   displacements = 'disp_x disp_y disp_z'
 []
 
@@ -31,7 +32,6 @@
   [./area]
     order = CONSTANT
     family = MONOMIAL
-#    initial_condition = 1.0
   [../]
   [./react_x]
     order = FIRST
@@ -56,62 +56,84 @@
 []
 
 [BCs]
-  [./fixx1]
+  [./fix1_x]
     type = DirichletBC
     variable = disp_x
-    boundary = 1
+    boundary = 1001
     value = 0.0
   [../]
-  [./fixx2]
-    type = DirichletBC
-    variable = disp_x
-    boundary = 2
-    value = 0.0
-  [../]
-
-  [./fixy1]
+  [./fix1_y]
     type = DirichletBC
     variable = disp_y
-    boundary = 3
+    boundary = 1001
     value = 0.0
   [../]
-  [./fixy2]
-    type = DirichletBC
-    variable = disp_y
-    boundary = 4
-    value = 0.0
-  [../]
-
-  [./fixz1]
+  [./fix1_z]
     type = DirichletBC
     variable = disp_z
-    boundary = 5
+    boundary = 1001
     value = 0.0
   [../]
-  [./fixz2]
+
+  [./fix2_x]
+    type = DirichletBC
+    variable = disp_x
+    boundary = 1002
+    value = 0.0
+  [../]
+#  [./fix2_y]
+#    type = DirichletBC
+#    variable = disp_y
+#    boundary = 1002
+#    value = 0.0
+#  [../]
+  [./fix2_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = 1002
+    value = 0.0
+  [../]
+
+#  [./fix3_x]
+#    type = DirichletBC
+#    variable = disp_x
+#    boundary = 1003
+#    value = 0.0
+#  [../]
+#  [./fix3_y]
+#    type = DirichletBC
+#    variable = disp_y
+#    boundary = 1003
+#    value = 0.0
+#  [../]
+  [./fix3_z]
+    type = DirichletBC
+    variable = disp_z
+    boundary = 1003
+    value = 0.0
+  [../]
+
+  [./fix4_z]
     type = FunctionDirichletBC
     variable = disp_z
-    boundary = 6
-    function = z6
+    boundary = 1004
+    function = z6 
   [../]
 []
 
 [AuxKernels]
   [./axial_stress]
     type = MaterialRealAux
-    block = '1'
     property = axial_stress
     variable = axial_stress
   [../]
   [./e_over_l]
     type = MaterialRealAux
-    block = '1'
     property = e_over_l
     variable = e_over_l
   [../]
   [./area]
     type = ConstantAux
-    block = '1'
     variable = area
     value = 1.0
     execute_on = 'initial timestep_begin'
@@ -137,8 +159,6 @@
 [Kernels]
   [./solid_x]
     type = StressDivergenceTensorsTruss
-    block = '1'
-    displacements = 'disp_x disp_y disp_z'
     component = 0
     variable = disp_x
     area = area
@@ -146,8 +166,6 @@
   [../]
   [./solid_y]
     type = StressDivergenceTensorsTruss
-    block = '1'
-    displacements = 'disp_x disp_y disp_z'
     component = 1
     variable = disp_y
     area = area
@@ -155,8 +173,6 @@
   [../]
   [./solid_z]
     type = StressDivergenceTensorsTruss
-    block = '1'
-    displacements = 'disp_x disp_y disp_z'
     component = 2
     variable = disp_z
     area = area
@@ -167,7 +183,6 @@
 [Materials]
   [./linelast]
     type = LinearElasticTruss
-    block = '1'
     youngs_modulus = 1e6
     displacements = 'disp_x disp_y disp_z'
 #    thermal_expansion_coeff = 0.1
